@@ -1,0 +1,22 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+@mixin flex($direction) {
+  display: flex;
+  flex-direction: $direction;
+}
+
+.info-box-container {
+  position: fixed;
+  background: brown;
+  top: 10%;
+  right: 0%;
+  width: 200px;
+  max-height: 50%;
+  height: 50%;
+  border-radius: 2px;
+  @include flex(row);
+}
