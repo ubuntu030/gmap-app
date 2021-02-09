@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap } from "react-google-maps";
 import { URL } from "./GmapAPI";
 
@@ -21,8 +21,7 @@ const Gmap = () => {
 			position: result.geometry.location,
 			map: googleMap,
 			// icon:result.icon
-		})
-		markers.push(marker);
+		});
 
 		let infowindow = null;
 		marker.addListener('click', () => {
@@ -39,6 +38,7 @@ const Gmap = () => {
 				});
 			infowindow.open(googleMap, marker);
 		});
+		return marker;
 	}
 	// Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
 	const findPlace = (name = '高雄長庚紀念醫院') => {
@@ -68,12 +68,12 @@ const Gmap = () => {
 		service.nearbySearch(request, (results, status) => {
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
-					createMarker(results[i]);
+					markers.push(createMarker(results[i]));;
 				}
 			}
 		});
 	}
-	
+
 	const searchWithText = (center) => {
 		const request = {
 			location: new google.maps.LatLng(22.648238, 120.347376),
