@@ -9,14 +9,66 @@
   flex-direction: $direction;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .info-box-container {
+  // &:before {
+  //   content: "";
+  //   width: 250px;
+  //   height: 50%;
+  //   background: inherit;
+  //   position: absolute;
+  //   left: -25px; //giving minus -25px left position
+  //   right: 0;
+  //   top: -25px; //giving minus -25px top position 
+  //   bottom: 0;
+  //   box-shadow: inset 0 0 0 200px rgba(255, 255, 255, 0.3);
+  //   filter: blur(10px);
+  // }
+  // background: inherit;
+
   position: fixed;
   background: brown;
   top: 10%;
   right: 0%;
   width: 200px;
   max-height: 50%;
-  height: 50%;
+  // height: 50%;
   border-radius: 2px;
-  @include flex(row);
+  @include flex(column);
+  flex: 1;
+
+  ul {
+    height: 100%;
+    overflow: auto;
+
+    li {
+      list-style: none;
+      margin: 5px;
+      height: 50px;
+      align-items: center;
+      justify-content: center;
+			background: #edebe8;
+			
+      @include flex(column);
+    }
+  }
 }
