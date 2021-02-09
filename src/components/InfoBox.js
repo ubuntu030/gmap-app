@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "./InfoBox.scss";
 
 const InfoBox = () => {
-
-
+	const { markList } = useSelector(state => state);
+	console.log(markList);
 	return (
 		<div className="info-box-container">
-			info-box
+			<ul>
+				{
+					markList.map(item => (
+						<li key={item.title}>{item.title}</li>
+					))
+				}
+			</ul>
 		</div>
 	)
 }
