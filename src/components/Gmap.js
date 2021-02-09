@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import { GoogleMap } from "react-google-maps";
+import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+
+import { setMarksList } from "../actions";
 import { URL } from "./GmapAPI";
 
 const Gmap = () => {
+	const dispatch = useDispatch();
 	const gmapRef = useRef(null);
 	let googleMap = null;
 	const createGooogleMap = () => {
@@ -70,6 +73,7 @@ const Gmap = () => {
 				for (var i = 0; i < results.length; i++) {
 					markers.push(createMarker(results[i]));;
 				}
+				dispatch(setMarksList(markers));
 			}
 		});
 	}
@@ -109,8 +113,10 @@ const Gmap = () => {
 		googleMapScript.addEventListener('load', () => {
 			googleMap = createGooogleMap();
 			// marker = createMarker();
+			let lazyLoad = null;
 			googleMap.addListener('bounds_changed', () => {
-				searchNearby(googleMap.getCenter());
+				clearTimeout(lazyLoad);
+				lazyLoad = setTimeout(() => searchNearby(googleMap.getCenter()), 500);
 				// console.log(googleMap.getBounds());
 				// findPlace();
 			});
