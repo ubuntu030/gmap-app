@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchPopInfoSuccess } from "../actions";
+import { fetchPopInfoSuccess,fetchPopInfoPadding} from "../actions";
 import "./InfoBox.scss";
 
 import { findPlace } from "./Gmap";
@@ -11,6 +11,7 @@ const InfoBox = () => {
 	const { markList } = useSelector(state => state.infoBoxRdcr);
 	console.log(markList);
 	const _onClick = async (item) => {
+		dispatch(fetchPopInfoPadding());
 		const result = await findPlace(item.title);
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
