@@ -6,12 +6,13 @@ import { Provider } from "react-redux";
 import rootReducer from "./reducers";
 import Gmap from "./components/Gmap";
 import InfoBox from "./components/InfoBox";
+import PopupBox from "./components/PopupBox";
 
 import "./style.scss";
 
 const store = createStore(
 	rootReducer,
-	// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 		<div>
 			<Gmap />
 			<InfoBox />
+			<PopupBox />
 		</div>
 	)
 
