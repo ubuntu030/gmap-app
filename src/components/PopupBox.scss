@@ -3,6 +3,31 @@
   flex-direction: $direction;
 }
 
+@mixin loader-style {
+  // loading style
+  border: 8px solid #323233;
+  /* Light grey */
+  border-top: 8px solid #3498db;
+  // border-right: 8px solid #3498db;
+  // border-bottom: 8px solid #3498db;
+  /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 1.5s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -39,6 +64,21 @@
   backdrop-filter: blur(2px);
   overflow-y: hidden;
 
+  .loading-ctn {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+		@include flex(row);
+		align-items: center;
+		justify-content: center;
+		backdrop-filter: blur(1px);
+    .loading {
+      @include loader-style
+    }
+  }
+
+
   .card {
     &.card-shadow {
       box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2)
@@ -54,26 +94,33 @@
     @include flex(row);
     justify-content: center;
     align-items: center;
+    position: relative;
     height: 10%;
-  }
 
-  .container {
-    @include flex(column);
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+    .icon-close {
+      position: absolute;
+      right: 0;
+      cursor: pointer;
+    }
+  }
+}
+
+.container {
+  @include flex(column);
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow-y: auto;
+
+  ul {
     overflow-y: auto;
 
-    ul {
-      overflow-y: auto;
+    li {
+      list-style: none;
 
-      li {
-        list-style: none;
-
-        img {
-          width: 100%;
-        }
+      img {
+        width: 100%;
       }
     }
   }
