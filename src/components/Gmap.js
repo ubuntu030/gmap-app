@@ -4,10 +4,32 @@ import { useDispatch } from "react-redux";
 import { setMarksList } from "../actions";
 import { URL } from "./GmapAPI";
 
+let googleMap = null;
+
+// Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
+export const findPlace = (name, location) => {
+	let request = {
+		query: name,
+		fields: ['name', 'formatted_address', 'opening_hours', 'geometry', 'photo', 'business_status', 'icon', 'place_id', 'plus_code', 'price_level', 'rating', 'user_ratings_total'],
+	};
+	let service = new google.maps.places.PlacesService(googleMap);
+	return new Promise((resolve, reject) => {
+		service.findPlaceFromQuery(request, function (results, status) {
+			if (status === google.maps.places.PlacesServiceStatus.OK) {
+				return resolve(results);
+				// for (var i = 0; i < results.length; i++) {
+				// 	createMarker(results[i]);
+				// }
+				// googleMap.setCenter(results[0].geometry.location);
+			}
+			reject([]);
+		})
+	});
+}
+
 const Gmap = () => {
 	const dispatch = useDispatch();
 	const gmapRef = useRef(null);
-	let googleMap = null;
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
 			zoom: 14,
@@ -43,32 +65,20 @@ const Gmap = () => {
 		});
 		return marker;
 	}
-	// Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
-	const findPlace = (name = '高雄長庚紀念醫院') => {
-		let request = {
-			query: name,
-			fields: ['name', 'formatted_address', 'opening_hours', 'geometry', 'photo', 'business_status', 'icon', 'place_id', 'plus_code', 'price_level', 'rating', 'user_ratings_total'],
-		};
-		let service = new google.maps.places.PlacesService(googleMap);
-		service.findPlaceFromQuery(request, function (results, status) {
-			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				for (var i = 0; i < results.length; i++) {
-					createMarker(results[i]);
-				}
-				// googleMap.setCenter(results[0].geometry.location);
-			}
-		});
-	}
 
 	const searchNearby = (center) => {
 		const request = {
-			location: center,
+			// location: center,
+			bounds: googleMap.getBounds(),
 			radius: '1500',
+			keyword: ['餐廳', 'restaurant'],
 			type: ['restaurant']
+			// rankBy: google.maps.places.RankBy.DISTANCE
 		}
 		clearMarkers();
 		let service = new google.maps.places.PlacesService(googleMap);
 		service.nearbySearch(request, (results, status) => {
+			markers = [];
 			if (status == google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 					markers.push(createMarker(results[i]));;
