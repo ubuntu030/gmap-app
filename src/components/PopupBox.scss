@@ -1,0 +1,65 @@
+@mixin flex($direction) {
+  display: flex;
+  flex-direction: $direction;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.popup-box {
+  margin: 0px;
+  padding: 5px;
+  box-sizing: border-box;
+  @include flex(column);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  backdrop-filter: blur(2px);
+
+  .card {
+    &.card-shadow {
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2)
+    }
+
+    width: 100%;
+    margin: 2px 0;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .header {
+    @include flex(row);
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+  }
+
+  .container {
+    @include flex(column);
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  }
+}
