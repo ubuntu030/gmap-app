@@ -37,6 +37,7 @@
   background: rgba(0, 0, 0, 0.5);
   color: white;
   backdrop-filter: blur(2px);
+  overflow-y: hidden;
 
   .card {
     &.card-shadow {
@@ -61,5 +62,19 @@
     flex: 1;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    overflow-y: auto;
+
+    ul {
+      overflow-y: auto;
+
+      li {
+        list-style: none;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
   }
 }
