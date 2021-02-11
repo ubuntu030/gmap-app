@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPopInfoSuccess, fetchPopInfoPadding } from "../actions";
 import "./InfoBox.scss";
 
-import { findPlace } from "./Gmap";
+import { findPlace, routeRender } from "./Gmap";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
@@ -15,6 +15,12 @@ const InfoBox = () => {
 		const result = await findPlace(item.title, item.position);
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
+	}
+
+	const routeClick = (p1, p2) => {
+		if (p1 && p2) {
+			routeRender(p1, p2);
+		}
 	}
 
 	return (
@@ -30,6 +36,7 @@ const InfoBox = () => {
 						<li key={item.title} onClick={() => storeClick(item)}>
 							<p>{item.title}</p>
 							<p>{item.distance ? Math.round(item.distance) + '米' : null}</p>
+							<button onClick={() => routeClick(myLocation, item.position)}>導航</button>
 						</li>
 					))
 				}
