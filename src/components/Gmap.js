@@ -152,6 +152,42 @@ export const distanceCalculate = (p1, p2) => {
 	}
 }
 
+let old_directionsRenderer = null;
+export const routeRender = (p1, p2) => {
+	cleanDirectionsRenderer();
+	// 沒設定起點終點直接丟出
+	if (!(p1 && p2)) return;
+	const directionsService = new google.maps.DirectionsService();
+	const directionsRenderer = new google.maps.DirectionsRenderer();
+	// 清除地圖就路徑
+	// 沒設定起點與終點
+	old_directionsRenderer = directionsRenderer;
+	const route = {
+		origin: p1,
+		destination: p2,
+		travelMode: google.maps.TravelMode.DRIVING,
+	}
+	const calculateAndDisplayRoute = (directionsService, directionsRenderer) => {
+		directionsService.route(
+			route,
+			(response, status) => {
+				if (status === "OK") {
+					directionsRenderer.setDirections(response);
+				} else {
+					window.alert("Directions request failed due to " + status);
+				}
+			}
+		);
+	}
+	directionsRenderer.setMap(googleMap);
+	calculateAndDisplayRoute(directionsService, directionsRenderer);
+}
+
+export const cleanDirectionsRenderer = () => {
+	// 清除地圖就路徑
+	if (old_directionsRenderer) old_directionsRenderer.setMap(null);
+}
+
 export const setMapOnAll = (map) => {
 	for (let i = 0; i < markers.length; i++) {
 		markers[i].setMap(map);
