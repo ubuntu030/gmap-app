@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setMarksList, setMyLocation } from "../actions";
 import { URL } from "./GmapAPI";
+import Icon from "./Icon";
 
 let googleMap = null;
 let markers = [];
@@ -32,7 +33,6 @@ export const findPlace = (name, location) => {
 }
 
 export const createMarker = (result) => {
-	let icon = result.icon ? result.icon : null;
 	let location = null;
 	if (result.geometry && result.geometry.location) {
 		location = result.geometry.location
@@ -43,10 +43,9 @@ export const createMarker = (result) => {
 		title: result.name,
 		position: location,
 		map: googleMap,
-		icon: icon
+		icon: result.icon
 	}
 	const marker = new window.google.maps.Marker(request);
-	console.log(marker.getIcon());
 	let infowindow = null;
 	marker.addListener('click', () => {
 		console.log(marker);
@@ -80,6 +79,7 @@ export const searchNearby = (center) => {
 		let markers = [];
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
 			for (var i = 0; i < results.length; i++) {
+				results[i].icon = Icon.restaurant;
 				markers.push(createMarker(results[i]));;
 			}
 			dispatch(setMarksList(markers));
@@ -131,7 +131,7 @@ const Gmap = () => {
 				myMarker = createMarker({
 					name: 'I',
 					position: e.latLng,
-					icon: 'src/public/icon-flag.png'
+					icon: Icon.flag
 				});
 				dispatch(setMyLocation(e.latLng));
 
