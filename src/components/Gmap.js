@@ -32,19 +32,21 @@ export const findPlace = (name, location) => {
 }
 
 export const createMarker = (result) => {
+	let icon = result.icon ? result.icon : null;
 	let location = null;
 	if (result.geometry && result.geometry.location) {
 		location = result.geometry.location
 	} else if (result && result.position) {
 		location = result.position;
 	}
-	const marker = new window.google.maps.Marker({
+	const request = {
 		title: result.name,
 		position: location,
 		map: googleMap,
-		// icon:result.icon
-	});
-
+		icon: icon
+	}
+	const marker = new window.google.maps.Marker(request);
+	console.log(marker.getIcon());
 	let infowindow = null;
 	marker.addListener('click', () => {
 		console.log(marker);
@@ -123,16 +125,16 @@ const Gmap = () => {
 			let myMarker = null;
 			googleMap.addListener("click", (e) => {
 				// placeMarkerAndPanTo(e.latLng, map);
-				if (infoBoxRdcr && infoBoxRdcr.myLocationOnSetting) {
-					if (myMarker) {
-						myMarker.setMap(null)
-					}
-					myMarker = createMarker({
-						name: 'I',
-						position: e.latLng,
-					});
-					dispatch(setMyLocation(e.latLng));
+				if (myMarker) {
+					myMarker.setMap(null)
 				}
+				myMarker = createMarker({
+					name: 'I',
+					position: e.latLng,
+					icon: 'src/public/icon-flag.png'
+				});
+				dispatch(setMyLocation(e.latLng));
+
 				console.log(infoBoxRdcr);
 			});
 		});
