@@ -11,6 +11,11 @@ let markers = [];
 let dispatch = null;
 
 // Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
+/**
+ * 搜尋特定地點
+ * @param {String} name 
+ * @param {Object} location 
+ */
 export const findPlace = (name, location) => {
 	let request = {
 		query: name,
@@ -31,7 +36,10 @@ export const findPlace = (name, location) => {
 		})
 	});
 }
-
+/**
+ * 建立地圖標記
+ * @param {Object} result 
+ */
 export const createMarker = (result) => {
 	let location = null;
 	if (result.geometry && result.geometry.location) {
@@ -63,8 +71,10 @@ export const createMarker = (result) => {
 	});
 	return marker;
 }
-
-export const searchNearby = (center) => {
+/**
+ * 搜尋當前地圖範圍的餐廳
+ */
+export const searchNearby = () => {
 	const request = {
 		// location: center,
 		bounds: googleMap.getBounds(),
