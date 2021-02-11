@@ -2,7 +2,6 @@ import { SET_MARKS_LIST, SET_MY_LOC_PADDING, SET_MY_LOC_SUCCESS, DEL_MY_LOC } fr
 
 const initialState = {
 	markList: [],
-	myLocationOnSetting: false,
 	myLocation: null
 };
 
@@ -11,11 +10,11 @@ const rootReducer = (state = initialState, action) => {
 		case SET_MARKS_LIST:
 			return { ...state, markList: [...action.payload] }
 		case SET_MY_LOC_PADDING:
-			return { ...state, myLocationOnSetting: true }
+			return { ...state }
 		case SET_MY_LOC_SUCCESS:
-			return { ...state, myLocationOnSetting: false, my_location: action.payload }
+			return { ...state, myLocation: action.payload }
 		case DEL_MY_LOC:
-			return { ...state, my_location: null }
+			return { ...state, myLocation: null }
 		default:
 			return state;
 	}
