@@ -8,7 +8,7 @@ import { findPlace } from "./Gmap";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
-	const { markList } = useSelector(state => state.infoBoxRdcr);
+	const { markList, myLocation } = useSelector(state => state.infoBoxRdcr);
 	console.log(markList);
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
@@ -21,7 +21,7 @@ const InfoBox = () => {
 		<div className="info-box-container">
 			<div>
 				<label>where am I?</label>
-				<button>Set my location</button>
+				{myLocation ? myLocation.lat() + ',' + myLocation.lng() : null}
 			</div>
 			<ul>
 				{
