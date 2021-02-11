@@ -1,7 +1,8 @@
+// https://developers.google.com/maps/documentation/javascript/places#find_place_from_query
 import React, { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { setMarksList } from "../actions";
+import { setMarksList, setMyLocation } from "../actions";
 import { URL } from "./GmapAPI";
 
 let googleMap = null;
@@ -12,13 +13,14 @@ let dispatch = null;
 export const findPlace = (name, location) => {
 	let request = {
 		query: name,
+		locationBias: location,
 		fields: ['name', 'formatted_address', 'opening_hours', 'geometry', 'photo', 'business_status', 'icon', 'place_id', 'plus_code', 'price_level', 'rating', 'user_ratings_total'],
 	};
 	let service = new google.maps.places.PlacesService(googleMap);
 	return new Promise((resolve, reject) => {
 		service.findPlaceFromQuery(request, function (results, status) {
 			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				return resolve(results);
+				resolve(results);
 				// for (var i = 0; i < results.length; i++) {
 				// 	createMarker(results[i]);
 				// }
@@ -30,9 +32,15 @@ export const findPlace = (name, location) => {
 }
 
 export const createMarker = (result) => {
+	let location = null;
+	if (result.geometry && result.geometry.location) {
+		location = result.geometry.location
+	} else if (result && result.position) {
+		location = result.position;
+	}
 	const marker = new window.google.maps.Marker({
 		title: result.name,
-		position: result.geometry.location,
+		position: location,
 		map: googleMap,
 		// icon:result.icon
 	});
@@ -61,8 +69,8 @@ export const searchNearby = (center) => {
 		bounds: googleMap.getBounds(),
 		radius: '1500',
 		keyword: ['餐廳', 'restaurant'],
-		type: ['restaurant']
-		// rankBy: google.maps.places.RankBy.DISTANCE
+		type: ['restaurant'],
+		rankBy: google.maps.places.RankBy.PROMINENCE
 	}
 	clearMarkers();
 	let service = new google.maps.places.PlacesService(googleMap);
@@ -88,6 +96,7 @@ export const clearMarkers = () => {
 
 const Gmap = () => {
 	dispatch = useDispatch();
+	const { infoBoxRdcr, popBoxRdcr } = useSelector(state => state);
 	const gmapRef = useRef(null);
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
@@ -110,8 +119,21 @@ const Gmap = () => {
 			googleMap.addListener('bounds_changed', () => {
 				clearTimeout(lazyLoad);
 				lazyLoad = setTimeout(() => searchNearby(googleMap.getCenter()), 500);
-				// console.log(googleMap.getBounds());
-				// findPlace();
+			});
+			let myMarker = null;
+			googleMap.addListener("click", (e) => {
+				// placeMarkerAndPanTo(e.latLng, map);
+				if (infoBoxRdcr && infoBoxRdcr.myLocationOnSetting) {
+					if (myMarker) {
+						myMarker.setMap(null)
+					}
+					myMarker = createMarker({
+						name: 'I',
+						position: e.latLng,
+					});
+					dispatch(setMyLocation(e.latLng));
+				}
+				console.log(infoBoxRdcr);
 			});
 		});
 	}, []);
