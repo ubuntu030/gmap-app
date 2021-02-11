@@ -19,14 +19,18 @@ const InfoBox = () => {
 
 	return (
 		<div className="info-box-container">
-			<div>
-				<label>where am I?</label>
-				{myLocation ? myLocation.lat() + ',' + myLocation.lng() : null}
+			<div className="my-loc-ctn">
+				<div>
+					{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
+				</div>
 			</div>
 			<ul>
 				{
 					markList.map(item => (
-						<li key={item.title} onClick={() => storeClick(item)}>{item.title}</li>
+						<li key={item.title} onClick={() => storeClick(item)}>
+							<p>{item.title}</p>
+							<p>{item.distance ? Math.round(item.distance) + '米' : null}</p>
+						</li>
 					))
 				}
 			</ul>
