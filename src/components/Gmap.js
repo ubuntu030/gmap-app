@@ -90,7 +90,7 @@ export const searchNearby = () => {
 		let markers = [];
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
 			for (var i = 0; i < results.length; i++) {
-				results[i].icon = Icon.restaurant;
+				results[i].icon = Icon.redDot;
 				markers.push(createMarker(results[i]));;
 			}
 			dispatch(setMarksList(markers));
@@ -189,11 +189,11 @@ const Gmap = () => {
 			icon: Icon.flag
 		});
 		dispatch(setMyLocation(e.latLng));
-		// calculate stores' distant between own position
-		let distant;
+		// calculate stores' distance between own position
+		let distance;
 		const listWithDistance = infoBoxRdcr.markList.map(item => {
-			distant = getDistance(e.latLng, item.position)
-			item.distant = distant;
+			distance = getDistance(e.latLng, item.position)
+			item.distance = distance;
 			return item;
 		});
 		dispatch(sortByDistance(listWithDistance));
