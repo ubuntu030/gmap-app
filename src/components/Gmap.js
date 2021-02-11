@@ -2,13 +2,14 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setMarksList, setMyLocation } from "../actions";
+import { setMarksList, setMyLocation, sortByDistance } from "../actions";
 import { URL } from "./GmapAPI";
 import Icon from "./Icon";
 
 let googleMap = null;
 let markers = [];
 let dispatch = null;
+let infoBoxRdcr, popBoxRdcr;
 
 // Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
 /**
@@ -97,6 +98,60 @@ export const searchNearby = () => {
 	});
 }
 
+export const getDistance = (p1, p2) => {
+	// https://stackoverflow.com/questions/1502590/calculate-distance-between-two-points-in-google-maps-v3
+	const rad = function (x) {
+		return x * Math.PI / 180;
+	};
+	const R = 6378137; // Earth’s mean radius in meter
+	const dLat = rad(p2.lat() - p1.lat());
+	const dLong = rad(p2.lng() - p1.lng());
+	const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+		Math.sin(dLong / 2) * Math.sin(dLong / 2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	const d = R * c;
+	return d; // returns the distance in meter
+}
+
+export const distanceCalculate = (p1, p2) => {
+	var origin1 = new google.maps.LatLng(55.930385, -3.118425);
+	var origin2 = 'Greenwich, England';
+	var destinationA = 'Stockholm, Sweden';
+	var destinationB = new google.maps.LatLng(50.087692, 14.421150);
+
+	var service = new google.maps.DistanceMatrixService();
+	service.getDistanceMatrix(
+		{
+			origins: [origin1, origin2],
+			destinations: [destinationA, destinationB],
+			travelMode: 'DRIVING',
+			transitOptions: TransitOptions,
+			drivingOptions: DrivingOptions,
+			unitSystem: UnitSystem,
+			avoidHighways: Boolean,
+			avoidTolls: Boolean,
+		}, callback);
+
+	function callback(response, status) {
+		if (status == 'OK') {
+			var origins = response.originAddresses;
+			var destinations = response.destinationAddresses;
+
+			for (var i = 0; i < origins.length; i++) {
+				var results = response.rows[i].elements;
+				for (var j = 0; j < results.length; j++) {
+					var element = results[j];
+					var distance = element.distance.text;
+					var duration = element.duration.text;
+					var from = origins[i];
+					var to = destinations[j];
+				}
+			}
+		}
+	}
+}
+
 export const setMapOnAll = (map) => {
 	for (let i = 0; i < markers.length; i++) {
 		markers[i].setMap(map);
@@ -108,7 +163,9 @@ export const clearMarkers = () => {
 
 const Gmap = () => {
 	dispatch = useDispatch();
-	const { infoBoxRdcr, popBoxRdcr } = useSelector(state => state);
+	let state = useSelector(state => state);
+	infoBoxRdcr = state.infoBoxRdcr;
+	popBoxRdcr = state.popBoxRdcr;
 	const gmapRef = useRef(null);
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
@@ -118,6 +175,29 @@ const Gmap = () => {
 				lng: 120.344494
 			}
 		})
+	}
+
+	let myMarker = null;
+	const mapClickEvent = (e) => {
+		// placeMarkerAndPanTo(e.latLng, map);
+		if (myMarker) {
+			myMarker.setMap(null)
+		}
+		myMarker = createMarker({
+			name: 'I',
+			position: e.latLng,
+			icon: Icon.flag
+		});
+		dispatch(setMyLocation(e.latLng));
+		// calculate stores' distant between own position
+		let distant;
+		const listWithDistance = infoBoxRdcr.markList.map(item => {
+			distant = getDistance(e.latLng, item.position)
+			item.distant = distant;
+			return item;
+		});
+		dispatch(sortByDistance(listWithDistance));
+		console.log(infoBoxRdcr);
 	}
 
 	useEffect(() => {
@@ -132,21 +212,7 @@ const Gmap = () => {
 				clearTimeout(lazyLoad);
 				lazyLoad = setTimeout(() => searchNearby(googleMap.getCenter()), 500);
 			});
-			let myMarker = null;
-			googleMap.addListener("click", (e) => {
-				// placeMarkerAndPanTo(e.latLng, map);
-				if (myMarker) {
-					myMarker.setMap(null)
-				}
-				myMarker = createMarker({
-					name: 'I',
-					position: e.latLng,
-					icon: Icon.flag
-				});
-				dispatch(setMyLocation(e.latLng));
-
-				console.log(infoBoxRdcr);
-			});
+			googleMap.addListener("click", (e) => mapClickEvent(e));
 		});
 	}, []);
 
