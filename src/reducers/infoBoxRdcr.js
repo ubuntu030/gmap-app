@@ -1,4 +1,4 @@
-import { SET_MARKS_LIST, SET_MY_LOC_SUCCESS, DEL_MY_LOC, SORT_BY_DISTANCE,SET_MARKS_LIST_PADDING } from "../actions";
+import { SET_MARKS_LIST, SET_MY_LOC_SUCCESS, DEL_MY_LOC, SORT_BY_DISTANCE, SET_MARKS_LIST_PADDING } from "../actions";
 
 const initialState = {
 	markList: [],
@@ -15,7 +15,7 @@ const rootReducer = (state = initialState, action) => {
 		case SET_MY_LOC_SUCCESS:
 			return { ...state, myLocation: action.payload }
 		case SORT_BY_DISTANCE:
-			return { ...state, markList: action.payload.sort((a, b) => a.distance - b.distance) }
+			return { ...state, markList: action.payload.sort((a, b) => a.distance - b.distance), isPadding: false }
 		case DEL_MY_LOC:
 			return { ...state, myLocation: null }
 		default:
