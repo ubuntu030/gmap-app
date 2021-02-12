@@ -2,6 +2,7 @@
  * ACTION TYPE
  */
 export const SET_MARKS_LIST = 'SET_MARKS_LIST';
+export const SET_MARKS_LIST_PADDING = 'SET_MARKS_LIST_PADDING';
 export const SET_MY_LOC_PADDING = 'SET_MY_LOC_PADDING';
 export const SET_MY_LOC_SUCCESS = 'SET_MY_LOC_SUCCESS';
 export const DEL_MY_LOC = 'DEL_MY_LOC';
@@ -16,6 +17,11 @@ export const FETCH_POP_INFO_ERROR = 'FETCH_POP_INFO_ERROR';
 /**
  * INFOBOX ACTION
  */
+export const setMarksListPadding = () => {
+	return {
+		type: SET_MARKS_LIST_PADDING,
+	}
+}
 export const setMarksList = (list) => {
 	return {
 		type: SET_MARKS_LIST,
