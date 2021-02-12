@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setMarksList, setMyLocation, sortByDistance } from "../actions";
+import { setMarksList, setMarksListPadding, setMyLocation, sortByDistance } from "../actions";
 import { URL } from "./GmapAPI";
 import Icon from "./Icon";
 
@@ -246,6 +246,7 @@ const Gmap = () => {
 			let lazyLoad = null;
 			googleMap.addListener('bounds_changed', () => {
 				clearTimeout(lazyLoad);
+				dispatch(setMarksListPadding());
 				lazyLoad = setTimeout(() => searchNearby(googleMap.getCenter()), 500);
 			});
 			googleMap.addListener("click", (e) => mapClickEvent(e));
