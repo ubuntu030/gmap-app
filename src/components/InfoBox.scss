@@ -64,7 +64,7 @@
   backdrop-filter: blur(2px);
   top: 10%;
   right: 0%;
-  width: 200px;
+  width: 220px;
   max-height: 50%;
   // height: 50%;
   border-radius: 2px;
@@ -76,16 +76,27 @@
     @include flex(row);
     align-items: center;
     justify-content: space-around;
-    padding: 2px 0;
-
-    .coordinate {
-      color: white;
-      @include prime-btn(#fff);
-    }
+    padding: 2px 2px;
 
     button {
       @include prime-btn(#fff);
     }
+
+    div {
+      &.coordinate {
+        color: white;
+        @include prime-btn(#fff);
+      }
+
+      &.btn-fn-ctn {
+        margin-left: auto;
+      }
+
+      &.img-btn-ctn {
+        margin-left: auto;
+      }
+    }
+
   }
 
   .loading-ctn {
@@ -102,8 +113,13 @@
   }
 
   ul {
-    height: 100%;
+    height: auto;
     overflow: auto;
+    max-height: 100%;
+
+    &.collapsed {
+      max-height: 0;
+    }
 
     li {
       list-style: none;

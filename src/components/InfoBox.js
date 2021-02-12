@@ -10,6 +10,7 @@ import Icon from "./Icon";
 const InfoBox = () => {
 	const dispatch = useDispatch();
 	const { markList, myLocation, isPadding } = useSelector(state => state.infoBoxRdcr);
+	const [isClps, setIsClps] = useState(false);
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
 		const result = await findPlace(item.title, item.position);
@@ -34,6 +35,11 @@ const InfoBox = () => {
 		panToLocation(location);
 	}
 
+	const doCollapse = () => {
+		setIsClps(!isClps);
+		console.log(isClps);
+	}
+
 	return (
 		<div className="info-box-container">
 			<div className="location-ctn">
@@ -43,8 +49,11 @@ const InfoBox = () => {
 							{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
 						</div> : null
 				}
-				<div>
+				<div className="btn-fn-ctn">
 					<button onClick={() => cleanRoute()}>清除路徑</button>
+				</div>
+				<div className="img-btn-ctn">
+					<SwitchButton isActive={isClps} callback={doCollapse} />
 				</div>
 			</div>
 			{
@@ -53,7 +62,7 @@ const InfoBox = () => {
 						<div className="loading"></div>
 					</div>
 					:
-					<ul>
+					<ul className={isClps ? 'collapsed' : null}>
 						{
 							markList.map(item => (
 								<li key={item.title} onMouseEnter={() => handleMouseEnter(item)} onMouseLeave={() => handleMouseLeave(item)}>
@@ -75,6 +84,18 @@ const InfoBox = () => {
 			}
 
 		</div>
+	)
+}
+
+const SwitchButton = ({ isActive = false, callback }) => {
+	return (
+		<>
+			{
+				isActive ?
+					<img onClick={() => callback()} src={Icon.plus} />
+					: <img onClick={() => callback()} src={Icon.minus} />
+			}
+		</>
 	)
 }
 
