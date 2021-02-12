@@ -79,7 +79,7 @@ export const searchNearby = () => {
 	const request = {
 		// location: center,
 		bounds: googleMap.getBounds(),
-		radius: '1500',
+		// radius: '1500',
 		keyword: ['餐廳', 'restaurant'],
 		type: ['restaurant'],
 		rankBy: google.maps.places.RankBy.PROMINENCE
@@ -87,7 +87,7 @@ export const searchNearby = () => {
 	clearMarkers();
 	let service = new google.maps.places.PlacesService(googleMap);
 	service.nearbySearch(request, (results, status) => {
-		let markers = [];
+		markers = [];
 		if (status == google.maps.places.PlacesServiceStatus.OK) {
 			for (var i = 0; i < results.length; i++) {
 				results[i].icon = Icon.redDot;
