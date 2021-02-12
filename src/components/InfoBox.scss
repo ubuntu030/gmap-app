@@ -80,6 +80,7 @@
 
     .coordinate {
       color: white;
+      @include prime-btn(#fff);
     }
 
     button {
