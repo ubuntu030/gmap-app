@@ -10,6 +10,7 @@ let googleMap = null;
 let markers = [];
 let dispatch = null;
 let infoBoxRdcr, popBoxRdcr;
+let myLocation;
 
 // Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
 /**
@@ -93,7 +94,13 @@ export const searchNearby = () => {
 				results[i].icon = Icon.redDot;
 				markers.push(createMarker(results[i]));;
 			}
-			dispatch(setMarksList(markers));
+			// 若當前已經存在個人位置設定則將餐廳列表依距離作排列
+			if (infoBoxRdcr.myLocation) {
+				const distanceList = updateListWithDistance(infoBoxRdcr.myLocation, markers);
+				dispatch(sortByDistance(distanceList));
+			} else {
+				dispatch(setMarksList(markers));
+			}
 		}
 	});
 }
@@ -197,11 +204,46 @@ export const clearMarkers = () => {
 	setMapOnAll(null);
 }
 
+
+// 地圖點擊事件
+let myMarker = null;
+const mapClickEvent = (e) => {
+	// placeMarkerAndPanTo(e.latLng, map);
+	if (myMarker) {
+		myMarker.setMap(null)
+	}
+	myMarker = createMarker({
+		name: 'I',
+		position: e.latLng,
+		icon: Icon.flag
+	});
+	dispatch(setMyLocation(e.latLng));
+	// calculate stores' distance between own position
+	const distanceList = updateListWithDistance(e.latLng, infoBoxRdcr.markList);
+	dispatch(sortByDistance(distanceList));
+	console.log(infoBoxRdcr);
+}
+/**
+ * 計算當前位置與列表中店家的直線距離，並返回包含距離的列表
+ * @param {Object} myLoc 我的位置
+ * @param {Array<Object>} list nearbySearch 返回的列表
+ * @return {Array}
+ */
+const updateListWithDistance = (myLoc, list) => {
+	let distance;
+	return list.map(item => {
+		distance = getDistance(myLoc, item.position)
+		item.distance = distance;
+		return item;
+	});
+}
+
 const Gmap = () => {
 	dispatch = useDispatch();
 	let state = useSelector(state => state);
 	infoBoxRdcr = state.infoBoxRdcr;
 	popBoxRdcr = state.popBoxRdcr;
+	myLocation = infoBoxRdcr.myLocation;
 	const gmapRef = useRef(null);
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
@@ -211,29 +253,6 @@ const Gmap = () => {
 				lng: 120.344494
 			}
 		})
-	}
-
-	let myMarker = null;
-	const mapClickEvent = (e) => {
-		// placeMarkerAndPanTo(e.latLng, map);
-		if (myMarker) {
-			myMarker.setMap(null)
-		}
-		myMarker = createMarker({
-			name: 'I',
-			position: e.latLng,
-			icon: Icon.flag
-		});
-		dispatch(setMyLocation(e.latLng));
-		// calculate stores' distance between own position
-		let distance;
-		const listWithDistance = infoBoxRdcr.markList.map(item => {
-			distance = getDistance(e.latLng, item.position)
-			item.distance = distance;
-			return item;
-		});
-		dispatch(sortByDistance(listWithDistance));
-		console.log(infoBoxRdcr);
 	}
 
 	useEffect(() => {
