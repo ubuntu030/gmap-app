@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPopInfoSuccess, fetchPopInfoPadding } from "../actions";
 import "./InfoBox.scss";
 
-import { findPlace, routeRender, cleanDirectionsRenderer } from "./Gmap";
+import { findPlace, routeRender, cleanDirectionsRenderer, panToLocation } from "./Gmap";
 import Icon from "./Icon";
 
 const InfoBox = () => {
@@ -16,14 +16,12 @@ const InfoBox = () => {
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
 	}
-
 	const routeClick = (p1, p2) => {
 		if (p1 && p2) {
 			routeRender(p1, p2);
 		}
 	}
 	const cleanRoute = () => cleanDirectionsRenderer();
-
 	const handleMouseEnter = (marker) => {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		marker.setIcon();
@@ -32,12 +30,19 @@ const InfoBox = () => {
 		marker.setAnimation(null);
 		marker.setIcon(Icon.redDot);
 	}
+	const handleFindMe = (location) => {
+		panToLocation(location);
+	}
+
 	return (
 		<div className="info-box-container">
 			<div className="location-ctn">
-				<div className="coordinate">
-					{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
-				</div>
+				{
+					myLocation ?
+						<div className="coordinate" onClick={() => { handleFindMe(myLocation) }}>
+							{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
+						</div> : null
+				}
 				<div>
 					<button onClick={() => cleanRoute()}>清除路徑</button>
 				</div>
