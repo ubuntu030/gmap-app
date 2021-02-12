@@ -8,8 +8,7 @@ import { findPlace, routeRender, cleanDirectionsRenderer } from "./Gmap";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
-	const { markList, myLocation } = useSelector(state => state.infoBoxRdcr);
-	console.log(markList);
+	const { markList, myLocation, isPadding } = useSelector(state => state.infoBoxRdcr);
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
 		const result = await findPlace(item.title, item.position);
@@ -34,25 +33,33 @@ const InfoBox = () => {
 					<button onClick={() => cleanRoute()}>清除路徑</button>
 				</div>
 			</div>
-			<ul>
-				{
-					markList.map(item => (
-						<li key={item.title}>
-							<div className="title" onClick={() => storeClick(item)}>
-								{item.title}
-							</div>
-							<div className="loc-relation-ctn">
-								<div>
-									{item.distance ? Math.round(item.distance) + '米' : null}
-								</div>
-								<div>
-									<button onClick={() => routeClick(myLocation, item.position)}>導航</button>
-								</div>
-							</div>
-						</li>
-					))
-				}
-			</ul>
+			{
+				isPadding ?
+					<div className="loading-ctn">
+						<div className="loading"></div>
+					</div>
+					:
+					<ul>
+						{
+							markList.map(item => (
+								<li key={item.title}>
+									<div className="title" onClick={() => storeClick(item)}>
+										{item.title}
+									</div>
+									<div className="loc-relation-ctn">
+										<div>
+											{item.distance ? Math.round(item.distance) + '米' : null}
+										</div>
+										<div>
+											<button onClick={() => routeClick(myLocation, item.position)}>導航</button>
+										</div>
+									</div>
+								</li>
+							))
+						}
+					</ul>
+			}
+
 		</div>
 	)
 }
