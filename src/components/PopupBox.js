@@ -26,15 +26,15 @@ const PopupBox = () => {
 				<img className="icon-close" onClick={() => closeBox()} src="src/public/icons8-macos-close-32.png" alt="close icon" />
 			</section>
 			<section className="container card">
-				<div>
+				<div className="addrees">
 					<label>地址:</label>
 					{info.formatted_address}
 				</div>
-				<div>
+				<div className="score">
 					<label>評價:</label>
 					{info.rating}
 				</div>
-				<div>
+				<div className="img-ctn">
 					<label>圖片:</label>
 					<ul>
 						{
