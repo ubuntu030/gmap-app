@@ -5,6 +5,7 @@ import { fetchPopInfoSuccess, fetchPopInfoPadding } from "../actions";
 import "./InfoBox.scss";
 
 import { findPlace, routeRender, cleanDirectionsRenderer } from "./Gmap";
+import Icon from "./Icon";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
@@ -23,6 +24,14 @@ const InfoBox = () => {
 	}
 	const cleanRoute = () => cleanDirectionsRenderer();
 
+	const handleMouseEnter = (marker) => {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+		marker.setIcon();
+	}
+	const handleMouseLeave = (marker) => {
+		marker.setAnimation(null);
+		marker.setIcon(Icon.redDot);
+	}
 	return (
 		<div className="info-box-container">
 			<div className="location-ctn">
@@ -42,7 +51,7 @@ const InfoBox = () => {
 					<ul>
 						{
 							markList.map(item => (
-								<li key={item.title}>
+								<li key={item.title} onMouseEnter={() => handleMouseEnter(item)} onMouseLeave={() => handleMouseLeave(item)}>
 									<div className="title" onClick={() => storeClick(item)}>
 										{item.title}
 									</div>
