@@ -19,6 +19,25 @@
   cursor: pointer;
 }
 
+@mixin loader-style {
+  border: 6px solid #32323375;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 1.5s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
@@ -65,6 +84,19 @@
 
     button {
       @include prime-btn(#fff);
+    }
+  }
+
+  .loading-ctn {
+    @include flex(row);
+    align-items: center;
+    justify-content: center;
+    margin: 10%;
+
+    .loading {
+      @include loader-style();
+      width: 60px;
+      height: 60px;
     }
   }
 
