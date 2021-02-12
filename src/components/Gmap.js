@@ -10,7 +10,6 @@ let googleMap = null;
 let markers = [];
 let dispatch = null;
 let infoBoxRdcr, popBoxRdcr;
-let myLocation;
 
 // Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
 /**
@@ -237,13 +236,19 @@ const updateListWithDistance = (myLoc, list) => {
 		return item;
 	});
 }
+/**
+ * 平移地圖到地點
+ * @param {Object} location 
+ */
+export const panToLocation = (location) => {
+	googleMap.panTo(location);
+}
 
 const Gmap = () => {
 	dispatch = useDispatch();
 	let state = useSelector(state => state);
 	infoBoxRdcr = state.infoBoxRdcr;
 	popBoxRdcr = state.popBoxRdcr;
-	myLocation = infoBoxRdcr.myLocation;
 	const gmapRef = useRef(null);
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
@@ -261,7 +266,6 @@ const Gmap = () => {
 		window.document.body.appendChild(googleMapScript);
 		googleMapScript.addEventListener('load', () => {
 			googleMap = createGooogleMap();
-			// marker = createMarker();
 			let lazyLoad = null;
 			googleMap.addListener('bounds_changed', () => {
 				clearTimeout(lazyLoad);
