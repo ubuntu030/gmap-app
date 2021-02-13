@@ -4,7 +4,7 @@ const initialState = {
 	markList: [],
 	myLocation: null,
 	isPadding: false,
-	isGuiding: true
+	isGuiding: false
 };
 
 const rootReducer = (state = initialState, action) => {
