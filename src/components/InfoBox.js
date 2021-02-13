@@ -64,7 +64,7 @@ const InfoBox = () => {
 				targetText = elm.querySelector('.title').innerText;
 				if (targetText === title) {
 					filterElm = elm;
-					elm.scrollIntoView();
+					elm.scrollIntoView({ behavior: 'smooth' });
 					break;
 				}
 			}
