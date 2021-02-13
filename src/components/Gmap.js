@@ -226,7 +226,8 @@ const Gmap = () => {
 			center: {
 				lat: 22.636220,
 				lng: 120.344494
-			}
+			},
+			disableDefaultUI: true
 		})
 	}
 
