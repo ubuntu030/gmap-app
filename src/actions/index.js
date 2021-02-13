@@ -5,7 +5,9 @@ export const SET_MARKS_LIST = 'SET_MARKS_LIST';
 export const SET_MARKS_LIST_PADDING = 'SET_MARKS_LIST_PADDING';
 export const SET_MY_LOC_PADDING = 'SET_MY_LOC_PADDING';
 export const SET_MY_LOC_SUCCESS = 'SET_MY_LOC_SUCCESS';
+export const SET_STORE_LOC_SUCCESS = 'SET_STORE_LOC_SUCCESS';
 export const DEL_MY_LOC = 'DEL_MY_LOC';
+
 export const SORT_BY_DISTANCE = 'SORT_BY_DISTANCE';
 export const SET_GUIDING = 'SET_GUIDING';
 
@@ -32,6 +34,12 @@ export const setMarksList = (list) => {
 export const setMyLocation = (data) => {
 	return {
 		type: 'SET_MY_LOC_SUCCESS',
+		payload: data
+	}
+}
+export const setStoreLocationInfo = (data) => {
+	return {
+		type: 'SET_STORE_LOC_SUCCESS',
 		payload: data
 	}
 }
