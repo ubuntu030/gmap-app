@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchPopInfoSuccess, fetchPopInfoPadding } from "../actions";
+import { fetchPopInfoSuccess, fetchPopInfoPadding, setGuiding } from "../actions";
 import "./InfoBox.scss";
 
 import { findPlace, routeRender, cleanDirectionsRenderer, panToLocation } from "./Gmap";
@@ -20,6 +20,8 @@ const InfoBox = () => {
 	const routeClick = (p1, p2) => {
 		if (p1 && p2) {
 			routeRender(p1, p2);
+		} else {
+			dispatch(setGuiding(true));
 		}
 	}
 	const cleanRoute = () => cleanDirectionsRenderer();
