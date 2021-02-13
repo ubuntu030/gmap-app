@@ -173,7 +173,18 @@ export const setMapOnAll = (map) => {
 export const clearMarkers = () => {
 	setMapOnAll(null);
 }
-
+/**
+ * 篩選出marker
+ * @param {String} title 店家名稱
+ * @return {Array} 
+ */
+export const filterMarker = (title) => {
+	let result = null;
+	if (markers.length > 0 && typeof title === 'string') {
+		result = markers.filter(item => item.title === title);
+	}
+	return result
+}
 
 // 地圖點擊事件
 let myMarker = null;

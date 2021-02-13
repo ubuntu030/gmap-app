@@ -4,13 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchPopInfoSuccess, fetchPopInfoPadding, setStoreLocationInfo, setGuiding } from "../actions";
 import "./InfoBox.scss";
 
-import { findPlace, routeRender, cleanDirectionsRenderer, panToLocation } from "./Gmap";
+import { findPlace, routeRender, cleanDirectionsRenderer, panToLocation, filterMarker } from "./Gmap";
 import Icon from "./Icon";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
 	const { markList, myLocation, isPadding, storeLocationInfo } = useSelector(state => state.infoBoxRdcr);
 	const [isClps, setIsClps] = useState(false);
+	const [slctMarker, setSlctMarker] = useState(null);
 	// 點選商家並取回資料後發送新的狀態
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
@@ -18,6 +19,8 @@ const InfoBox = () => {
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
 		dispatch(setStoreLocationInfo({ title: item.title, location: item.position }));
+		const mkr = filterMarker(item.title);
+		setSlctMarker(mkr);
 	}
 	// 建立路徑圖
 	const routeClick = (p1, p2) => {
@@ -72,7 +75,10 @@ const InfoBox = () => {
 							<p>
 								{storeLocationInfo.title}
 							</p>
-							<button onClick={() => handleFindLocation(storeLocationInfo.location)}>
+							<button
+								onMouseEnter={() => handleMouseEnter(slctMarker[0])}
+								onMouseLeave={() => handleMouseLeave(slctMarker[0])}
+								onClick={() => handleFindLocation(storeLocationInfo.location)}>
 								{storeLocationInfo.location.lat().toFixed(3) + ',' + storeLocationInfo.location.lng().toFixed(3)}
 							</button>
 						</div> : null
