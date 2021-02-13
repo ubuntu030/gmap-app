@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchPopInfoSuccess, fetchPopInfoPadding, setStoreLocationInfo, setGuiding } from "../actions";
@@ -12,6 +12,7 @@ const InfoBox = () => {
 	const { markList, myLocation, isPadding, storeLocationInfo } = useSelector(state => state.infoBoxRdcr);
 	const [isClps, setIsClps] = useState(false);
 	const [slctMarker, setSlctMarker] = useState(null);
+	const ulElm = useRef(null);
 	// 點選商家並取回資料後發送新的狀態
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
@@ -52,6 +53,25 @@ const InfoBox = () => {
 		console.log(isClps);
 	}
 
+	const findStoreOnList = (title) => {
+		let filterElm = null;
+		if (ulElm && title) {
+			const elms = ulElm.current.children;
+			let elm = null;
+			let targetText = '';
+			for (let index = 0; index < elms.length; index++) {
+				elm = elms[index];
+				targetText = elm.querySelector('.title').innerText;
+				if (targetText === title) {
+					filterElm = elm;
+					elm.scrollIntoView();
+					break;
+				}
+			}
+		}
+		return filterElm;
+	}
+
 	return (
 		<main className="info-box-container">
 			<section className="location-ctn">
@@ -72,7 +92,7 @@ const InfoBox = () => {
 				{
 					storeLocationInfo && storeLocationInfo.title ?
 						<div className="store">
-							<p>
+							<p onClick={() => findStoreOnList(storeLocationInfo.title)}>
 								{storeLocationInfo.title}
 							</p>
 							<button
@@ -90,7 +110,7 @@ const InfoBox = () => {
 						<div className="loading"></div>
 					</div>
 					:
-					<ul className={isClps ? 'collapsed' : null}>
+					<ul ref={ulElm} className={isClps ? 'collapsed' : null}>
 						{
 							markList.map(item => (
 								<li key={item.title} onMouseEnter={() => handleMouseEnter(item)} onMouseLeave={() => handleMouseLeave(item)}>
