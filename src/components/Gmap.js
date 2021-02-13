@@ -9,7 +9,7 @@ import Icon from "./Icon";
 let googleMap = null;
 let markers = [];
 let dispatch = null;
-let infoBoxRdcr, popBoxRdcr;
+let infoBoxRdcr;
 
 // Reference:https://developers.google.com/maps/documentation/javascript/places#place_search_fields
 /**
@@ -103,7 +103,11 @@ export const searchNearby = () => {
 		}
 	});
 }
-
+/**
+ * 計算兩地點的球面距離
+ * @param {Object} p1 地點一
+ * @param {Object} p2 地點二
+ */
 export const getDistance = (p1, p2) => {
 	// https://stackoverflow.com/questions/1502590/calculate-distance-between-two-points-in-google-maps-v3
 	const rad = function (x) {
@@ -120,45 +124,12 @@ export const getDistance = (p1, p2) => {
 	return d; // returns the distance in meter
 }
 
-export const distanceCalculate = (p1, p2) => {
-	var origin1 = new google.maps.LatLng(55.930385, -3.118425);
-	var origin2 = 'Greenwich, England';
-	var destinationA = 'Stockholm, Sweden';
-	var destinationB = new google.maps.LatLng(50.087692, 14.421150);
-
-	var service = new google.maps.DistanceMatrixService();
-	service.getDistanceMatrix(
-		{
-			origins: [origin1, origin2],
-			destinations: [destinationA, destinationB],
-			travelMode: 'DRIVING',
-			transitOptions: TransitOptions,
-			drivingOptions: DrivingOptions,
-			unitSystem: UnitSystem,
-			avoidHighways: Boolean,
-			avoidTolls: Boolean,
-		}, callback);
-
-	function callback(response, status) {
-		if (status == 'OK') {
-			var origins = response.originAddresses;
-			var destinations = response.destinationAddresses;
-
-			for (var i = 0; i < origins.length; i++) {
-				var results = response.rows[i].elements;
-				for (var j = 0; j < results.length; j++) {
-					var element = results[j];
-					var distance = element.distance.text;
-					var duration = element.duration.text;
-					var from = origins[i];
-					var to = destinations[j];
-				}
-			}
-		}
-	}
-}
-
 let old_directionsRenderer = null;
+/**
+ * 繪製兩地點的路線圖
+ * @param {Object} p1 地點一
+ * @param {Object} p2 地點二
+ */
 export const routeRender = (p1, p2) => {
 	cleanDirectionsRenderer();
 	// 沒設定起點終點直接丟出
@@ -248,7 +219,6 @@ const Gmap = () => {
 	dispatch = useDispatch();
 	let state = useSelector(state => state);
 	infoBoxRdcr = state.infoBoxRdcr;
-	popBoxRdcr = state.popBoxRdcr;
 	const gmapRef = useRef(null);
 	const createGooogleMap = () => {
 		return new window.google.maps.Map(gmapRef.current, {

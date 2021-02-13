@@ -17,6 +17,7 @@ const InfoBox = () => {
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
 	}
+	// 建立路徑圖
 	const routeClick = (p1, p2) => {
 		if (p1 && p2) {
 			routeRender(p1, p2);
@@ -24,19 +25,23 @@ const InfoBox = () => {
 			dispatch(setGuiding(true));
 		}
 	}
+	// 清除路徑圖
 	const cleanRoute = () => cleanDirectionsRenderer();
+	// 進入項目則顯示彈跳地標
 	const handleMouseEnter = (marker) => {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		marker.setIcon();
 	}
+	// 離開則清除彈跳地標
 	const handleMouseLeave = (marker) => {
 		marker.setAnimation(null);
 		marker.setIcon(Icon.redDot);
 	}
+	// 將我位置至中於地圖上
 	const handleFindMe = (location) => {
 		panToLocation(location);
 	}
-
+	// infoBox 縮小功能
 	const doCollapse = () => {
 		setIsClps(!isClps);
 		console.log(isClps);
@@ -88,7 +93,11 @@ const InfoBox = () => {
 		</div>
 	)
 }
-
+/**
+ * switch Icon button
+ * @param {Boolean} isActive 
+ * @param {Function} callback 
+ */
 const SwitchButton = ({ isActive = false, callback }) => {
 	return (
 		<>
