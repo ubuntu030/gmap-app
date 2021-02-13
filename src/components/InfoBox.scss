@@ -73,6 +73,7 @@
     @include flex(column);
     justify-content: space-around;
     padding: 2px 2px;
+    font-size: 14px;
 
     button {
       @include prime-btn(#fff);
@@ -85,11 +86,17 @@
 
       .coordinate {
         color: white;
+        align-items: center;
+        @include flex(row);
         @include prime-btn(#fff);
       }
 
       .btn-fn-ctn {
         margin-left: auto;
+
+        button {
+          height: 100%;
+        }
       }
 
       .img-btn-ctn {
@@ -106,6 +113,7 @@
       justify-content: space-around;
       flex: 1;
       color: #fff;
+      margin-top: 2px;
 
       p {
         text-overflow: ellipsis;
