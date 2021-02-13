@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchPopInfoSuccess, fetchPopInfoPadding, setGuiding } from "../actions";
+import { fetchPopInfoSuccess, fetchPopInfoPadding, setStoreLocationInfo, setGuiding } from "../actions";
 import "./InfoBox.scss";
 
 import { findPlace, routeRender, cleanDirectionsRenderer, panToLocation } from "./Gmap";
@@ -9,13 +9,15 @@ import Icon from "./Icon";
 
 const InfoBox = () => {
 	const dispatch = useDispatch();
-	const { markList, myLocation, isPadding } = useSelector(state => state.infoBoxRdcr);
+	const { markList, myLocation, isPadding, storeLocationInfo } = useSelector(state => state.infoBoxRdcr);
 	const [isClps, setIsClps] = useState(false);
+	// 點選商家並取回資料後發送新的狀態
 	const storeClick = async (item) => {
 		dispatch(fetchPopInfoPadding());
 		const result = await findPlace(item.title, item.position);
 		console.log(result);
 		dispatch(fetchPopInfoSuccess(result));
+		dispatch(setStoreLocationInfo({ title: item.title, location: item.position }));
 	}
 	// 建立路徑圖
 	const routeClick = (p1, p2) => {
@@ -37,8 +39,8 @@ const InfoBox = () => {
 		marker.setAnimation(null);
 		marker.setIcon(Icon.redDot);
 	}
-	// 將我位置至中於地圖上
-	const handleFindMe = (location) => {
+	// 將目標位置至中於地圖上
+	const handleFindLocation = (location) => {
 		panToLocation(location);
 	}
 	// infoBox 縮小功能
@@ -48,21 +50,34 @@ const InfoBox = () => {
 	}
 
 	return (
-		<div className="info-box-container">
-			<div className="location-ctn">
+		<main className="info-box-container">
+			<section className="location-ctn">
+				<div className="div-1">
+					{
+						myLocation ?
+							<div className="coordinate" onClick={() => { handleFindLocation(myLocation) }}>
+								{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
+							</div> : null
+					}
+					<div className="btn-fn-ctn">
+						<button onClick={() => cleanRoute()}>清除路徑</button>
+					</div>
+					<div className="img-btn-ctn">
+						<SwitchButton isActive={isClps} callback={doCollapse} />
+					</div>
+				</div>
 				{
-					myLocation ?
-						<div className="coordinate" onClick={() => { handleFindMe(myLocation) }}>
-							{myLocation ? myLocation.lat().toFixed(3) + ',' + myLocation.lng().toFixed(3) : null}
+					storeLocationInfo && storeLocationInfo.title ?
+						<div className="store">
+							<p>
+								{storeLocationInfo.title}
+							</p>
+							<button onClick={() => handleFindLocation(storeLocationInfo.location)}>
+								{storeLocationInfo.location.lat().toFixed(3) + ',' + storeLocationInfo.location.lng().toFixed(3)}
+							</button>
 						</div> : null
 				}
-				<div className="btn-fn-ctn">
-					<button onClick={() => cleanRoute()}>清除路徑</button>
-				</div>
-				<div className="img-btn-ctn">
-					<SwitchButton isActive={isClps} callback={doCollapse} />
-				</div>
-			</div>
+			</section>
 			{
 				isPadding ?
 					<div className="loading-ctn">
@@ -90,7 +105,7 @@ const InfoBox = () => {
 					</ul>
 			}
 
-		</div>
+		</main>
 	)
 }
 /**

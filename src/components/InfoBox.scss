@@ -70,8 +70,7 @@
   flex: 1;
 
   .location-ctn {
-    @include flex(row);
-    align-items: center;
+    @include flex(column);
     justify-content: space-around;
     padding: 2px 2px;
 
@@ -79,22 +78,39 @@
       @include prime-btn(#fff);
     }
 
-    div {
-      &.coordinate {
+    .div-1 {
+      @include flex(row);
+      justify-content: space-around;
+      flex: 1;
+
+      .coordinate {
         color: white;
         @include prime-btn(#fff);
       }
 
-      &.btn-fn-ctn {
+      .btn-fn-ctn {
         margin-left: auto;
       }
 
-      &.img-btn-ctn {
+      .img-btn-ctn {
         margin-left: auto;
 
         img {
           box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
         }
+      }
+    }
+
+    .store {
+      @include flex(row);
+      justify-content: space-around;
+      flex: 1;
+      color: #fff;
+
+      p {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
 
