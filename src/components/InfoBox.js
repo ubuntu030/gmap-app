@@ -52,7 +52,10 @@ const InfoBox = () => {
 		setIsClps(!isClps);
 		console.log(isClps);
 	}
-
+	/**
+	 * 在list 中找到商家並捲動到位置
+	 * @param {String} title 商店名
+	 */
 	const findStoreOnList = (title) => {
 		let filterElm = null;
 		if (ulElm && title) {
