@@ -96,7 +96,7 @@
     position: relative;
     height: 10%;
     padding: 5px 30px 5px 5px;
-    
+
 
     .icon-close {
       position: absolute;
@@ -122,8 +122,6 @@
     justify-content: space-between;
   }
 
-
-
   ul {
     overflow-y: auto;
 
@@ -134,5 +132,11 @@
         width: 100%;
       }
     }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .popup-box {
+    width: 99vw;
   }
 }

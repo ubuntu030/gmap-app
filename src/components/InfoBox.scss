@@ -153,3 +153,11 @@
     }
   }
 }
+
+@media screen and (max-width: 400px) {
+  .info-box-container {
+    top: 0%;
+    width: 100vw;
+    max-height: 25%;
+  }
+}
