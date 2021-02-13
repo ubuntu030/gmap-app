@@ -111,8 +111,13 @@
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        margin: 0 2px;
         cursor: pointer;
         @include prime-btn(#fff);
+      }
+
+      button {
+        margin: 0 2px;
       }
     }
 
