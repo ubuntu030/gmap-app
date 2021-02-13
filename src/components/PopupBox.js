@@ -34,21 +34,24 @@ const PopupBox = () => {
 					<label>評價:</label>
 					<p>{info.rating}</p>
 				</div>
-				<div className="img-ctn card card-shadow">
-					<label>圖片:</label>
-					<ul>
-						{
-							info.photos.map((item, i) => {
-								return (
-									<li key={i}>
-										<img src={item.getUrl()} alt="" />
-									</li>
-								)
-							})
-						}
+				{
+					info.photos ?
+						<div className="img-ctn card card-shadow">
+							<label>圖片:</label>
+							<ul>
+								{
+									info.photos.map((item, i) => {
+										return (
+											<li key={i}>
+												<img src={item.getUrl()} alt="" />
+											</li>
+										)
+									})
+								}
 
-					</ul>
-				</div>
+							</ul>
+						</div> : null
+				}
 			</section>
 		</main>
 		: null
