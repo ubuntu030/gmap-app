@@ -7,6 +7,7 @@ export const SET_MY_LOC_PADDING = 'SET_MY_LOC_PADDING';
 export const SET_MY_LOC_SUCCESS = 'SET_MY_LOC_SUCCESS';
 export const DEL_MY_LOC = 'DEL_MY_LOC';
 export const SORT_BY_DISTANCE = 'SORT_BY_DISTANCE';
+export const SET_GUIDING = 'SET_GUIDING';
 
 export const IS_SHOW_POPBOX = 'IS_SHOW_POPBOX'
 export const FETCH_POP_INFO_PADDING = 'FETCH_POP_INFO_PADDING';
@@ -38,6 +39,12 @@ export const sortByDistance = (list) => {
 	return {
 		type: SORT_BY_DISTANCE,
 		payload: list
+	}
+}
+export const setGuiding = (isGuiding) => {
+	return {
+		type: SET_GUIDING,
+		payload: isGuiding
 	}
 }
 /**
