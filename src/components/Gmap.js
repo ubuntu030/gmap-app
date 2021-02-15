@@ -77,7 +77,7 @@ export const createMarker = (result) => {
  */
 export const searchNearby = () => {
 	const request = {
-		// location: center,
+		// location: googleMap.getCenter(),
 		bounds: googleMap.getBounds(),
 		// radius: '1500',
 		keyword: ['餐廳', 'restaurant'],
@@ -235,8 +235,8 @@ const Gmap = () => {
 		return new window.google.maps.Map(gmapRef.current, {
 			zoom: 14,
 			center: {
-				lat: 22.636220,
-				lng: 120.344494
+				lat: 22.990431,
+				lng: 120.204777
 			},
 			disableDefaultUI: true
 		})
